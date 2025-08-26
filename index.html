@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Happy Anniversary 🎂</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: linear-gradient(to bottom, #fff0f6, #e6f7ff);
+      text-align: center;
+      overflow-x: hidden;
+    }
+    h1 { margin-top: 20px; color: #ff4d6d; font-size: 2em; }
+    .cake { margin: 40px auto; width: 200px; position: relative; }
+    .tier {
+      background: #ffcfde;
+      border-radius: 10px;
+      margin: 0 auto 10px;
+    }
+    .tier.t1 { height: 60px; width: 200px; }
+    .tier.t2 { height: 50px; width: 160px; background: #ffd9a8; }
+    .tier.t3 { height: 40px; width: 120px; background: #c6e6ff; position: relative; }
+    .candles { display: flex; justify-content: center; gap: 10px; position: absolute; top: -50px; left: 0; right: 0; }
+    .candle { width: 12px; height: 40px; background: pink; border-radius: 3px; position: relative; cursor: pointer; }
+    .wick { position: absolute; top: -8px; left: 50%; width: 2px; height: 8px; background: black; transform: translateX(-50%); }
+    .flame { position: absolute; top: -22px; left: 50%; width: 14px; height: 20px;
+      background: radial-gradient(circle, yellow 40%, orange 70%, transparent 100%);
+      border-radius: 50%; transform: translateX(-50%); animation: flicker 0.2s infinite alternate; }
+    @keyframes flicker { from{transform:translateX(-50%) scale(1);} to{transform:translateX(-50%) scale(1.1);} }
+    #messageCard {
+      opacity: 0; transition: 1s ease; max-width: 90%; margin: 20px auto;
+      background: #fff; border-radius: 15px; padding: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    }
+    #messageCard.show { opacity: 1; }
+    #messageCard img { width: 100%; max-width: 300px; border-radius: 10px; margin-top: 15px; }
+    button {
+      background: #ff4d6d; border: none; padding: 10px 15px; border-radius: 8px; color: white;
+      font-weight: bold; cursor: pointer; margin: 10px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Happy Anniversary, Abhiii! ✨</h1>
+  <p>Tap the candles or press the button to blow them out 🎂</p>
+
+  <div class="cake">
+    <div class="tier t3">
+      <div class="candles" id="candles"></div>
+    </div>
+    <div class="tier t2"></div>
+    <div class="tier t1"></div>
+  </div>
+
+  <button onclick="blowAll()">Blow the Candles 🕯️</button>
+  <button onclick="playSong()">Play Our Song 🎶</button>
+
+  <div id="messageCard">
+    <h2>To My Love ❤️</h2>
+    <p>
+      Can you believe it’s been a whole year since you confessed you liked me and I finally said it back? 🥰  
+      That moment changed everything for us, and I’m so grateful it happened.  
+      One year later, I still get butterflies thinking about it 💕  
+      Thank you for making me feel so loved every single day.  
+      Here’s to the most beautiful beginning and to many, many more years together ❤️✨
+    </p>
+    <img src="Abhi.jpg" alt="Us">
+  </div>
+
+  <audio id="song" src="song.mp3"></audio>
+
+  <script>
+    const candlesRow = document.getElementById("candles");
+    for (let i = 0; i < 5; i++) {
+      let c = document.createElement("div");
+      c.className = "candle";
+      c.innerHTML = "<div class='wick'></div><div class='flame'></div>";
+      c.onclick = () => extinguish(c);
+      candlesRow.appendChild(c);
+    }
+
+    function extinguish(candle) {
+      let flame = candle.querySelector(".flame");
+      if (flame) flame.remove();
+      checkAllOut();
+    }
+
+    function blowAll() {
+      document.querySelectorAll(".candle").forEach(extinguish);
+    }
+
+    function checkAllOut() {
+      if (!document.querySelector(".flame")) {
+        document.getElementById("messageCard").classList.add("show");
+        confetti();
+      }
+    }
+
+    function playSong() {
+      document.getElementById("song").play();
+    }
+
+    // Simple confetti effect
+    function confetti() {
+      for (let i = 0; i < 50; i++) {
+        let conf = document.createElement("div");
+        conf.style.position = "fixed";
+        conf.style.width = "8px";
+        conf.style.height = "8px";
+        conf.style.background = `hsl(${Math.random()*360},100%,50%)`;
+        conf.style.top = "-10px";
+        conf.style.left = Math.random()*100 + "%";
+        conf.style.opacity = "0.8";
+        document.body.appendChild(conf);
+        let fall = conf.animate(
+          [{ transform: `translateY(${window.innerHeight+20}px) rotate(${Math.random()*720}deg)` }],
+          { duration: 3000+Math.random()*2000, fill: "forwards" }
+        );
+        fall.onfinish = () => conf.remove();
+      }
+    }
+  </script>
+</body>
+</html>
